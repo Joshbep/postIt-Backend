@@ -17,6 +17,9 @@ app.use(express.urlencoded({extended: true}))
 // Routes
 app.use("/posts", routes.posts)
 
+//DB connection
+require('./config/db.connection')
+
 app.listen (PORT, () => {
     console.log(" Connected! ")
 })
