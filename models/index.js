@@ -1,3 +1,4 @@
 module.exports={
-  Post:require("./Posts")
+  Post:require("./Posts"),
+  User: require("./Users")
 }
