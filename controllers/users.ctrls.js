@@ -15,7 +15,30 @@ const register = (req, res) => {
   })
 }
 
+const signin = (req, res) => {
+  console.log(req.body)
+  db.User.findOne({username: req.body.username}, (err, foundUser) => {
+    if(foundUser) {
+      console.log(foundUser)
+      const validLogin = bcrypt.compareSync(req.body.password, foundUser.password)
+      if (validLogin) {
+        res.json(foundUser)
+    } else {
+      res.send('Invalid username or password')
+    }
+  }
+  })
+}
+
+const signout = (req, res) => {
+  req.session.destroy(() => {
+      res.status(200).json({ msg: 'users logged out' })
+  })
+}
+
 
 module.exports = {
-   register
+   register,
+   signin,
+   signout
 }
