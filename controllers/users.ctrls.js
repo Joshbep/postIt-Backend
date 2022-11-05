@@ -36,9 +36,30 @@ const signout = (req, res) => {
   })
 }
 
+//get specific user by id for later
+const index = (req, res) => {
+  // res.send("get route working")
+  db.User.findById(req.params.id,
+      {
+          $set: req.body
+      },
+      {new: true},
+      (err, user) => {
+          if(err) return res.status(400).json({error: err.message})
+          return res.status(200).json(user)
+      }
+  )
+}
+
+const follow = (req, res) => {
+  db.User.findOne({username: req.body.username}
+
+}
+
 
 module.exports = {
-   register,
-   signin,
-   signout
+  index,
+  register,
+  signin,
+  signout
 }
