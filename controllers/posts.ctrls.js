@@ -48,11 +48,28 @@ const update = (req, res) => {
     )
 }
 
+//like and dislike a post
+const like = async (req, res) => {
+  try {
+    const post = db.Post.findById(req.params.id);
+    if(!post.likes.includes(req.body.userId)) {
+      await post.updateOne({ $push: { likes: req.body.userId } });
+      res.status(200).json("the post has been liked")
+    } else {
+      await post.updateOne({ $pull: {likes: req.body.userId } });
+      res.status(200).json("the post has been disliked")
+    }
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
 
 
 module.exports = {
   index,
   create,
   destroy,
-  update
+  update,
+  like
 }

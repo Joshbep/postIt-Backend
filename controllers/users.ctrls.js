@@ -54,6 +54,8 @@ const index = (req, res) => {
 //try catch
 //https://expressjs.com/en/guide/error-handling.html
 //https://www.w3schools.com/js/js_errors.asp
+//docs for push
+//https://www.mongodb.com/docs/manual/reference/operator/update/push/
 const follow = async (req, res) => {
   if(req.body.userId !== req.params.id) {
     try {
@@ -72,6 +74,7 @@ const follow = async (req, res) => {
   }
 }
 
+//docs for pull https://www.mongodb.com/docs/manual/reference/operator/update/pull/
 const unfollow = async (req, res) => {
   if(req.body.userId !== req.params.id) {
     try{
