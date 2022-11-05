@@ -63,7 +63,7 @@ const follow = async (req, res) => {
       const currentUser = await db.User.findById(req.body.userId);
       if(!user.followers.includes(req.body.userId)) {
         await user.updateOne({ $push: { followers: req.body.userId } });
-        await currentUser.updateOne({ $push: { following: req.params.body } });
+        await currentUser.updateOne({ $push: { following: req.params.id } });
         res.status(200).json("you followed the user")
       } else {
         res.status(400).json("you already follow this user")
@@ -71,6 +71,8 @@ const follow = async (req, res) => {
     } catch (err) {
       res.status(500).json(err)
     }
+  } else {
+    res.status(400).json("You cannot follow you own account")
   }
 }
 
