@@ -39,16 +39,14 @@ const signout = (req, res) => {
 //get specific user by id for later
 const index = (req, res) => {
   // res.send("get route working")
-  db.User.findById(req.params.id,
-      {
-          $set: req.body
-      },
-      {new: true},
-      (err, user) => {
-          if(err) return res.status(400).json({error: err.message})
-          return res.status(200).json(user)
-      }
-  )
+  db.Post.findById((req.params.id), (err,
+    post) => {
+      if(err) return res.status(404).json({error: err.message})
+      return res.status(200).json({
+        post,
+        requestedAt: new Date().toLocaleDateString()
+      })
+    })
 }
 
 //try catch
