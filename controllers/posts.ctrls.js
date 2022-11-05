@@ -34,11 +34,25 @@ const destroy = (req, res) => {
   })
 }
 
+//update route
+const update = (req, res) => {
+    db.Post.findByIdAndUpdate(req.params.id,
+        {
+            $set: req.body
+        },
+        {new: true},
+        (err, updatedPost) => {
+            if(err) return res.status(400).json({error: err.message})
+            return res.status(200).json(updatedPost)
+        }
+    )
+}
 
 
 
 module.exports = {
   index,
   create,
-  destroy
+  destroy,
+  update
 }
