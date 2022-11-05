@@ -51,9 +51,25 @@ const index = (req, res) => {
   )
 }
 
-const follow = (req, res) => {
-  db.User.findOne({username: req.body.username}
-
+//try catch
+//https://expressjs.com/en/guide/error-handling.html
+//https://www.w3schools.com/js/js_errors.asp
+const follow = async (req, res) => {
+  if(req.body.userId !== req.params.id) {
+    try {
+      const user = await db.User.findById(req.params.id);
+      const currentUser = await db.User.findById(req.body.userId);
+      if(!user.followers.includes(req.body.userId)) {
+        await user.updateOne({ $push: { followers: req.body.userId } });
+        await currentUser.updateOne({ $push: { followings: req.params.body } });
+        res.status(200).json("you followed the user")
+      } else {
+        res.status(400).json("you already follow this user")
+      }
+    } catch (err) {
+      res.status(500).json(err)
+    }
+  }
 }
 
 
@@ -61,5 +77,6 @@ module.exports = {
   index,
   register,
   signin,
-  signout
+  signout,
+  follow
 }
