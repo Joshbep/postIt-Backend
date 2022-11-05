@@ -13,7 +13,7 @@ const index = (req, res) => {
     })
 }
 
-//create a pin with req.body
+//create a post with req.body
 const create = (req, res) => {
   db.Post.create(req.body, (error, createdPosts) => {
     console.log(error)
@@ -23,8 +23,17 @@ const create = (req, res) => {
   // res.send("create")
 }
 
+//destroy a single post by its ID
+const destroy = (req, res) => {
+    res.send('destroy route')
+  // db.Post.findByIdAndDelete(req.params.id,)
+}
+
+
+
 
 module.exports = {
   index,
   create,
+  destroy
 }
