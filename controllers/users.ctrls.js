@@ -72,11 +72,30 @@ const follow = async (req, res) => {
   }
 }
 
+const unfollow = async (req, res) => {
+  if(req.body.userId !== req.params.id) {
+    try{
+      const user = await db.User.findById(req.params.id);
+      const currentUser = await db.User.findById(req.body.userId);
+      if(user.followers.includes(req.body.userId)) {
+        await user.updateOne({ $pull: { followers: req.body.userId } });
+        await currentUser.updateOne({ $pull: { followings: req.params.id } });
+        res.status(200).json("You unfollowed the user");
+      } else {
+        res.status(400).json("You don't follow this user")
+      }
+    } catch(err) {
+      res.status(500).json(err)
+    }
+  }
+}
+
 
 module.exports = {
   index,
   register,
   signin,
   signout,
-  follow
+  follow,
+  unfollow
 }

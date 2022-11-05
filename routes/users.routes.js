@@ -8,4 +8,5 @@ router.post("/signin", ctrls.users.signin)
 router.post("/register", ctrls.users.register)
 router.delete("/signout", ctrls.users.signout)
 router.put("/:id/follow", ctrls.users.follow)
+router.put("/:id/unfollow", ctrls.users.unfollow)
 module.exports = router;
