@@ -25,8 +25,13 @@ const create = (req, res) => {
 
 //destroy a single post by its ID
 const destroy = (req, res) => {
-    res.send('destroy route')
-  // db.Post.findByIdAndDelete(req.params.id,)
+    // res.send('destroy route')
+  db.Post.findByIdAndDelete(req.params.id, (err, deletedPost) => {
+    if(err) return res.status(400).json({error: error.message})
+    return res.status(200).json({
+      message: "Post deleted Successfully"
+    })
+  })
 }
 
 
