@@ -19,6 +19,20 @@ const cors = require('cors')
 
 require('dotenv').config()
 
+//whitelist and corsOptions
+const whitelist = ['http://localhost:3000']
+const corsOptions = {
+    origin: function(origin, callback) {
+        // if (whitelist.indexOf(origin) !== -1) {
+        //     callback(null, true)
+        //   } else {
+        //     callback(new Error('Not allowed by CORS'))
+        //   }
+    callback(null, true)
+    }
+}
+
+
 const PORT = process.env.PORT || 3001
 
 
@@ -31,7 +45,7 @@ app.use(session({
 }))
 
 // Middleware
-app.use(cors("*"))
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
