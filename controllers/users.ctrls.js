@@ -36,18 +36,17 @@ const signout = (req, res) => {
   })
 }
 
+
 //get specific user by id for later
 const index = async (req, res) => {
-  const userId = req.query.user
-  try {
-    const user = userId
-      ? await db.User.findById(userId)
-      : await db.User.findOne({ username: username });
-    const { password, updatedAt, ...other } = user._doc;
-    res.status(200).json(other);
-  } catch (err) {
-    res.status(500).json(err);
-  }
+  db.User.findById(req.params.id, (err,
+    users) => {
+      if(err) return res.status(404).json({error: err.message})
+      return res.status(200).json({
+        users,
+        requestedAt: new Date().toLocaleDateString()
+      })
+    })
 }
 
 //try catch

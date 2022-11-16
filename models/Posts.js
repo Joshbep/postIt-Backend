@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
-  user: {type: mongoose.Schema.Types.ObjectId, ref: "User", required: true},
+  userId: {type: mongoose.Schema.Types.ObjectId, ref: "User", required: true},
   description: {type: String},
   img: {type: String},
   likes: {type: Array, default: []},
