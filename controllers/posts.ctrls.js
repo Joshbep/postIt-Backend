@@ -1,16 +1,53 @@
 //DB Instance
 const db = require("../models")
-//posts get route
-const index = (req, res) => {
+
+
+//find all posts
+const index = async (req, res) => {
   // res.send("get route working")
-  db.Post.find({}, (err,
-    posts) => {
-      if(err) return res.status(404).json({error: err.message})
-      return res.status(200).json({
-        posts,
-        requestedAt: new Date().toLocaleDateString()
+  db.Post.find({}, (err, posts) => {
+         if(err) return res.status(404).json({error: err.message})
+         return res.status(200).json({
+            posts,
+            requestedAt: new Date().toLocaleDateString()
+         })
       })
-    })
+}
+
+//posts for our timeline
+const timeline = async (req, res) => {
+  // res.send("get route working")
+  try {
+    const currentUser = await db.User.findById(req.params.userId);
+    const userPosts = await db.Post.find({ userId: currentUser._id });
+    const friendPosts = await db.Promise.all(
+      currentUser.followings.map((friendId) => {
+        return db.Post.find({ userId: friendId });
+      })
+    );
+    res.status(200).json(userPosts.concat(...friendPosts));
+  } catch (err) {
+    res.status(500).json(err);
+  }
+}
+
+const getPostId = async (req, res) => {
+  try {
+    const post = await db.Post.findById(req.params.id);
+    res.status(200).json(post);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+}
+
+const userPosts = async (req, res) => {
+  try {
+    const user = await db.User.findOne({ username: req.params.username });
+    const posts = await db.Post.find({ userId: user._id });
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 }
 
 //create a post with req.body
@@ -68,8 +105,11 @@ const like = async (req, res) => {
 
 module.exports = {
   index,
+  timeline,
   create,
   destroy,
   update,
-  like
+  like,
+  userPosts,
+  getPostId
 }

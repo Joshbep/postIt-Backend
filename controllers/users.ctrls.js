@@ -39,14 +39,14 @@ const signout = (req, res) => {
 
 //get specific user by id for later
 const index = async (req, res) => {
-  db.User.findById(req.params.id, (err,
-    users) => {
-      if(err) return res.status(404).json({error: err.message})
-      return res.status(200).json({
-        users,
-        requestedAt: new Date().toLocaleDateString()
+  db.User.find({}, (err,
+      users) => {
+         if(err) return res.status(404).json({error: err.message})
+         return res.status(200).json({
+            users,
+            requestedAt: new Date().toLocaleDateString()
+         })
       })
-    })
 }
 
 //try catch
