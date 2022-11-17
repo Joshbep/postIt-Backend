@@ -18,6 +18,17 @@ const session = require('express-session')
 const cors = require('cors')
 
 require('dotenv').config()
+// Port
+const PORT = process.env.PORT || 3001
+
+
+// Session Secret
+const SESSION_SECRET = process.env.SESSION_SECRET
+app.use(session({
+	secret: SESSION_SECRET,
+	resave: false,
+	saveUninitialized: false
+}))
 
 //whitelist and corsOptions
 const whitelist = ['http://localhost:3000']
@@ -32,17 +43,6 @@ const corsOptions = {
     }
 }
 
-
-const PORT = process.env.PORT || 3001
-
-
-// Session Secret
-const SESSION_SECRET = process.env.SESSION_SECRET
-app.use(session({
-	secret: SESSION_SECRET,
-	resave: false,
-	saveUninitialized: false
-}))
 
 // Middleware
 app.use(cors(corsOptions))

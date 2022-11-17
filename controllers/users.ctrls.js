@@ -24,7 +24,7 @@ const signin = (req, res) => {
       if (validLogin) {
         res.json(foundUser)
     } else {
-      res.send('Invalid username or password')
+      res.status(400).json('Invalid username or password')
     }
   }
   })
@@ -38,6 +38,16 @@ const signout = (req, res) => {
 
 
 //get specific user by id for later
+const getUserId = async (req, res) => {
+  try {
+    const user = await db.User.findById(req.params.id);
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+}
+
+
 const index = async (req, res) => {
   db.User.find({}, (err,
       users) => {
@@ -70,7 +80,7 @@ const follow = async (req, res) => {
       res.status(500).json(err)
     }
   } else {
-    res.status(400).json("You cannot follow you own account")
+    res.status(400).json("You cannot follow your own account")
   }
 }
 
@@ -93,6 +103,17 @@ const unfollow = async (req, res) => {
   }
 }
 
+//destroy a single post by its ID
+const destroy = (req, res) => {
+    // res.send('destroy route')
+  db.User.findByIdAndDelete(req.params.id, (err, deletedUser) => {
+    if(err) return res.status(400).json({error: error.message})
+    return res.status(200).json({
+      message: "User deleted Successfully"
+    })
+  })
+}
+
 
 module.exports = {
   index,
@@ -100,5 +121,7 @@ module.exports = {
   signin,
   signout,
   follow,
-  unfollow
+  unfollow,
+  destroy,
+  getUserId
 }
