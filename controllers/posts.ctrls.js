@@ -18,7 +18,7 @@ const index = async (req, res) => {
 const timeline = async (req, res) => {
   // res.send("get route working")
   try {
-    const currentUser = await db.User.findById(req.body.userId);
+    const currentUser = await db.User.findById(req.params.userId);
     const userPosts = await db.Post.find({ userId: currentUser._id });
     const friendPosts = await Promise.all(
       currentUser.following.map((friendId) => {
