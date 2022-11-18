@@ -18,16 +18,17 @@ const index = async (req, res) => {
 const timeline = async (req, res) => {
   // res.send("get route working")
   try {
-    const currentUser = await db.User.findById(req.params.userId);
+    const currentUser = await db.User.findById(req.body.userId);
     const userPosts = await db.Post.find({ userId: currentUser._id });
-    const friendPosts = await db.Promise.all(
-      currentUser.followings.map((friendId) => {
+    const friendPosts = await Promise.all(
+      currentUser.following.map((friendId) => {
         return db.Post.find({ userId: friendId });
       })
     );
     res.status(200).json(userPosts.concat(...friendPosts));
   } catch (err) {
     res.status(500).json(err);
+    console.log(err)
   }
 }
 
@@ -61,28 +62,34 @@ const create = (req, res) => {
 }
 
 //destroy a single post by its ID
-const destroy = (req, res) => {
+const destroy = async (req, res) => {
     // res.send('destroy route')
-  db.Post.findByIdAndDelete(req.params.id, (err, deletedPost) => {
-    if(err) return res.status(400).json({error: error.message})
-    return res.status(200).json({
-      message: "Post deleted Successfully"
-    })
-  })
+    try {
+      const post = await db.Post.findById(req.params.id);
+      if (post.userId === req.body.userId) {
+        await post.deleteOne({ $set: req.body });
+        res.status(200).json("You deleted your post!");
+      } else {
+        res.status(403).json("you can delete only your post");
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
 }
 
 //update route
-const update = (req, res) => {
-    db.Post.findByIdAndUpdate(req.params.id,
-        {
-            $set: req.body
-        },
-        {new: true},
-        (err, updatedPost) => {
-            if(err) return res.status(400).json({error: err.message})
-            return res.status(200).json(updatedPost)
-        }
-    )
+const update = async (req, res) => {
+  try {
+    const post = await db.Post.findById(req.params.id);
+    if (post.userId === req.body.userId) {
+      await post.updateOne({ $set: req.body });
+      res.status(200).json("You updated your post!");
+    } else {
+      res.status(403).json("you can update only your post");
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
 }
 
 //like and dislike a post
