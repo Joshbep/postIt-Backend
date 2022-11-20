@@ -9,7 +9,7 @@ const register = (req, res) => {
       res.send('that username is taken')
     } else {
       db.User.create(req.body, (error, createdUser) => {
-        res.status(201).json(createdUser)
+        res.status(200).json(createdUser)
       })
     }
   })

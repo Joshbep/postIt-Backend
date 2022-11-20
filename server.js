@@ -31,15 +31,18 @@ app.use(session({
 }))
 
 //whitelist and corsOptions
-const whitelist = ['http://localhost:3000']
+const whitelist = ['http://localhost:3000', "http://localhost:3001"]
 const corsOptions = {
-    origin: function(origin, callback) {
-        // if (whitelist.indexOf(origin) !== -1) {
-        //     callback(null, true)
-        //   } else {
-        //     callback(new Error('Not allowed by CORS'))
-        //   }
-    callback(null, true)
+    origin: function (origin, callback) {
+        if (!origin) {
+            // bypasses postman request with no origin
+            return callback(null, true)
+        }
+        if (whitelist.indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS!'))
+        }
     }
 }
 

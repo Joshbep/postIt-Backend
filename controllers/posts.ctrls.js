@@ -32,14 +32,14 @@ const timeline = async (req, res) => {
   }
 }
 
-const getPostId = async (req, res) => {
-  try {
-    const post = await db.Post.findById(req.params.id);
-    res.status(200).json(post);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-}
+// const getPostId = async (req, res) => {
+//   try {
+//     const post = await db.Post.findById(req.params.id);
+//     res.status(200).json(post);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// }
 
 const userPosts = async (req, res) => {
   try {
@@ -118,5 +118,5 @@ module.exports = {
   update,
   like,
   userPosts,
-  getPostId
+  // getPostId
 }
