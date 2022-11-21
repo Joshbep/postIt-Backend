@@ -64,17 +64,12 @@ const create = (req, res) => {
 //destroy a single post by its ID
 const destroy = async (req, res) => {
     // res.send('destroy route')
-    try {
-      const post = await db.Post.findById(req.params.id);
-      if (post.userId === req.body.userId) {
-        await post.deleteOne({ $set: req.body });
-        res.status(200).json("You deleted your post!");
-      } else {
-        res.status(403).json("you can delete only your post");
-      }
-    } catch (err) {
-      res.status(500).json(err);
-    }
+    db.Post.findByIdAndDelete(req.params.id, (err, deletedPost) => {
+      if(err) return res.status(400).json({error: error.message})
+      return res.status(200).json({
+         message: `Pin ${deletedPost.name} deleted successfully`
+      })
+   })
 }
 
 //update route
