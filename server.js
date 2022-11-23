@@ -5,8 +5,14 @@ const app = express();
 // internal modules
 const routes = require('./routes')
 
+//multer
+const multer = require("multer");
+
 // method override
 const methodOverride  = require('method-override')
+
+//path
+const path = require("path");
 
 // Bcrypt
 const bcrypt = require('bcrypt')
@@ -30,6 +36,9 @@ app.use(session({
 	saveUninitialized: false
 }))
 
+//for multer and uploading images from backend
+app.use("/images", express.static(path.join(__dirname, "public/images")));
+
 //whitelist and corsOptions
 const whitelist = ['http://localhost:3000', "http://localhost:3001"]
 const corsOptions = {
@@ -51,6 +60,25 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, req.body.name);
+  },
+});
+
+const upload = multer({ storage: storage });
+app.post("/upload", upload.single("file"), (req, res) => {
+  try {
+    return res.status(200).json("File uploded successfully");
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 
 // Routes
 app.use("/posts", routes.posts)
