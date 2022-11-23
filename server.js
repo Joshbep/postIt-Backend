@@ -36,9 +36,6 @@ app.use(session({
 	saveUninitialized: false
 }))
 
-//for multer and uploading images from backend
-app.use("/images", express.static(path.join(__dirname, "public/images")));
-
 //whitelist and corsOptions
 const whitelist = ['http://localhost:3000', "http://localhost:3001"]
 const corsOptions = {
@@ -83,7 +80,7 @@ app.post("/upload", upload.single("file"), (req, res) => {
 // Routes
 app.use("/posts", routes.posts)
 app.use("/users", routes.users)
-
+app.use("/images", express.static(path.join(__dirname, "public/images")));
 //DB connection
 require('./config/db.connection')
 
