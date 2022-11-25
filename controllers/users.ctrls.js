@@ -52,6 +52,27 @@ const index = async (req, res) => {
   }
 }
 
+//get friends
+
+const getFriends = async (req, res) => {
+  try {
+    const user = await db.User.findById(req.params.userId);
+    const friends = await Promise.all(
+      user.following.map((friendId) => {
+        return db.User.findById(friendId);
+      })
+    );
+    let friendList = [];
+    friends.map((friend) => {
+      const { _id, username, profilePicture } = friend;
+      friendList.push({ _id, username, profilePicture });
+    });
+    res.status(200).json(friendList)
+  } catch (err) {
+    res.status(500).json(err);
+  }
+}
+
 //try catch
 //https://expressjs.com/en/guide/error-handling.html
 //https://www.w3schools.com/js/js_errors.asp
@@ -116,4 +137,5 @@ module.exports = {
   follow,
   unfollow,
   destroy,
+  getFriends
 }
