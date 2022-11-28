@@ -16,6 +16,9 @@
   "name": "postit-backend",
   "description": "",
   "version": "1.0.0",
+  "engines": {
+    "node": "18.11.0"
+  },
   "main": "server.js",
   "repository": {
     "type": "git",
