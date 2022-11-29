@@ -37,7 +37,7 @@ app.use(session({
 }))
 
 //whitelist and corsOptions
-const whitelist = ['http://localhost:3000', "http://localhost:3001"]
+const whitelist = ['http://localhost:3000', "http://localhost:3001, https://postittwitterclone.herokuapp.com"]
 const corsOptions = {
     origin: function (origin, callback) {
         if (!origin) {
