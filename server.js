@@ -37,7 +37,7 @@ app.use(session({
 }))
 
 //whitelist and corsOptions
-const whitelist = ['http://localhost:3000', "http://localhost:3001, https://postittwitterclone.herokuapp.com"]
+const whitelist = ['http://localhost:3000', "http://localhost:3001"]
 const corsOptions = {
     origin: function (origin, callback) {
         if (!origin) {
@@ -58,6 +58,7 @@ app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
+//https://expressjs.com/en/resources/middleware/multer.html
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "public/images");
